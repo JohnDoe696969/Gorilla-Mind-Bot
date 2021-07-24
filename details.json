@@ -1,0 +1,19 @@
+{
+    "email": "fakegmail@gmail.com",
+    "password": "mypassword",
+    "address1": "123 Fakestreet",
+    "address2": "",
+    "city": "Fakecity",
+    "first_name": "John",
+    "last_name": "Doe",
+    "country": "United States",
+    "province": "Michigan",
+    "discount": "mpmd",
+    "zip": "48000",
+    "phone": "1234567",
+    "number": "5555 5555 5555 4444",
+    "expiry": "12 30",
+    "name": "John Doe",
+    "verification_value": "123",
+    "full_buy": "true"
+}
