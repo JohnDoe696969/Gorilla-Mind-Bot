@@ -4,3 +4,9 @@ GORILLA_PRODUCTS = {
     "DREAM": "https://gorillamind.com/products/gorilla-dream?_pos=4&_sid=2186b688f&_ss=r",
     "SMOOTH": "https://gorillamind.com/products/gorilla-mind-smooth?_pos=6&_sid=f46964de1&_ss=r"
 }
+GORILLA_IDS = {
+    "TURKESTERONE": "turkesterone",
+    "GORILLA MODE LEMON LIME": "39315814449197",
+    "DREAM": "34488939479085",
+    "SMOOTH": ""
+}

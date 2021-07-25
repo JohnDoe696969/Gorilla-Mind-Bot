@@ -35,8 +35,6 @@ def main():
 
 
 
-
-
 def gorilla(item, quantity, interval):
     config = False
 
@@ -46,11 +44,6 @@ def gorilla(item, quantity, interval):
     else:
         log.info('Your details config is incorrectly setup')   
     if(config):
-        gorilla = Gorilla_Mind(
-            item,
-            quantity
-        )
-        gorilla.run_item(item_url=GORILLA_PRODUCTS[item], quantity=quantity, interval=interval, config=config)
-
+        gorilla = Gorilla_Mind(item=item, quantity=quantity, interval=interval, config=config)
 
 main.add_command(gorilla)
