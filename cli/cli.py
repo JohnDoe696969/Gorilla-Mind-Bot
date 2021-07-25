@@ -30,7 +30,7 @@ def main():
     default=lambda: int(os.environ.get("product_quantity", 1)),
     show_default="current user",
 )
-@click.option("--interval", type=int, default=5)
+@click.option("--interval", type=int, default=2)
 
 
 

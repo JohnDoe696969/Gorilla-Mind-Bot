@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 
 from chromedriver_py import binary_path  # this will get you the path variable
 from selenium import webdriver
@@ -10,6 +11,7 @@ from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support import expected_conditions as EC
 
+from spinlog import Spinner
 
 from utils.logger import log
 from utils.selenium_utils import options
@@ -45,13 +47,17 @@ def get_details_id(name):
 
 class Gorilla_Mind:
     def __init__(self, item, quantity, interval, config):
+        chrome_options = webdriver.ChromeOptions()
+        prefs = {"profile.managed_default_content_settings.images": 2}
+        chrome_options.add_experimental_option("prefs", prefs)
         self.driver = webdriver.Chrome(executable_path=binary_path, options=options)
         self.wait = WebDriverWait(self.driver, 10)
-        self.short_wait = WebDriverWait(self.driver, 1)
         self.item_url = GORILLA_PRODUCTS[item]
         self.quantity = quantity
         self.interval = interval
         self.config = config
+        self.attempt = 0
+        self.started_at = datetime.now()
         self.should_login = self.config["email"] != "" and self.config["password"] != ""
         self.driver.get("https://gorillamind.com/collections/supplements")
         self.driver.maximize_window()
@@ -108,20 +114,19 @@ class Gorilla_Mind:
     def check_stock(self):
         self.driver.get(self.item_url)
         while True:
-            log.info(f"Loading page: {self.item_url}")
-            source = str(self.driver.page_source.encode("utf-8"))
-            if(source.find('"available":true') != -1):
-                log.info("Item in stock!")
-                item_id = source.partition(ID)[2][:100].split('"')[0]
-                log.info("Item id: " + str(item_id))
-                return item_id
-            elif(source.find('"available":false') != 1):
-                log.info("Item not stock!")
+            time_delta = str(datetime.now() - self.started_at).split(".")[0]  
+            with Spinner.get(
+                f"Adding to cart (attempt {self.attempt}, have been running for {time_delta})..."
+            ) as s:
+                self.attempt = self.attempt + 1                  
+                source = str(self.driver.page_source.encode("utf-8"))
+                if(source.find('"available":true') != -1):
+                    log.info("Item in stock!")
+                    item_id = source.partition(ID)[2][:20].split('"')[0]
+                    log.info("Item id: " + str(item_id))
+                    return item_id
                 time.sleep(self.interval)
-            else:
-                log.info("Couldn't check the stock")
-                time.sleep(self.interval)
-            self.driver.refresh()
+                self.driver.refresh()
 
     def apply_discount(self):
         discount_input = ""      
@@ -161,7 +166,8 @@ class Gorilla_Mind:
         #exit the iframe
         self.driver.switch_to_window(parent_window)
         if(self.config["full_buy"] == "true"):
-            self.driver.find_element_by_xpath(selectors["pay_button"]).click()          
+            self.driver.find_element_by_xpath(selectors["pay_button"]).click()   
+            log.info('Clicking buy')       
 
     def run_item(self, fast_checkout):
         

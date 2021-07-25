@@ -6,9 +6,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
+prefs = {"profile.managed_default_content_settings.images": 2}
+
 options = Options()
 options.add_experimental_option("excludeSwitches", ["enable-automation"])
 options.add_experimental_option("useAutomationExtension", False)
+options.add_experimental_option("prefs", prefs)
 
 def wait_for_element(d, e_id, time=30):
     """
@@ -91,3 +94,4 @@ def enable_headless():
     options.add_argument("--headless")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
+    options.add_argument('--log-level=3')

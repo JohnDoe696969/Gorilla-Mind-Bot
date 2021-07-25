@@ -1,3 +1,4 @@
 click
 selenium
 chromedriver-py
+spinlog
